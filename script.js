@@ -36,8 +36,8 @@ function togglePlayer() {
 // Atualiza o cursor do mouse com base no jogador atual
 function updateCursor() {
   const cursorUrl = currentPlayer === "O" 
-    ? "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/bola2.png" 
-    : "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/xis2.png";
+    ? "assets/bola2.png" 
+    : "assets/xis2.png";
   const cursorSize = 22;
   document.body.style.cursor = `url(${cursorUrl}) ${cursorSize} ${cursorSize}, auto`;
   document.querySelectorAll(".cell").forEach(cell => {
@@ -63,8 +63,8 @@ function highlightWinningCells(boardIndex, combination, color, winner) {
   winnerOverlay.style.height = "100%";
   winnerOverlay.style.backgroundImage = `url(${
     winner === "O" 
-      ? "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/bola-big.png" 
-      : "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/xis-big.png"
+      ? "assets/bola-big.png" 
+      : "assets/xis-big.png"
   })`;
   winnerOverlay.style.backgroundSize = "cover";
   winnerOverlay.style.backgroundPosition = "center";
@@ -120,7 +120,7 @@ function checkMiniBoardWinner(boardIndex) {
     drawOverlay.style.left = 0;
     drawOverlay.style.width = "100%";
     drawOverlay.style.height = "100%";
-    drawOverlay.style.backgroundImage = "url('C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/empate-big.png')";
+    drawOverlay.style.backgroundImage = "url('assets/empate-big.png')";
     drawOverlay.style.backgroundSize = "cover";
     drawOverlay.style.backgroundPosition = "center";
     drawOverlay.style.zIndex = "10";
@@ -166,8 +166,8 @@ function handleCellClick(event, boardIndex, cellIndex) {
   boardStates[boardIndex][cellIndex] = currentPlayer;
   const cell = event.target;
   const imageUrl = currentPlayer === "O" 
-    ? "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/bola2.png" 
-    : "C:/Users/User/OneDrive/Design/jogo-da-velha-2/assets/xis2.png";
+    ? "assets/bola2.png" 
+    : "assets/xis2.png";
   cell.style.backgroundImage = `url('${imageUrl}')`;
   cell.style.backgroundSize = "cover";
 
