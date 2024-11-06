@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Velha 2.0</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="left-panel">
+            <div class="top-row">
+                <img id="logo" src="assets/logo.png" alt="Logo">
+                <div id="scoreboard">
+                    <div class="score">
+                        <span>Bola:</span>
+                        <span id="score-o-count">0</span>
+                    </div>
+                    <div class="score">
+                        <span>Xis:</span>
+                        <span id="score-x-count">0</span>
+                    </div>
+                </div>
+            </div>
+            <div id="current-player"></div>
+            <div id="restart-container">
+                <button id="restart-button" onclick="resetGame()">REINICIAR</button>
+            </div>
+        </div>
+
+        <div id="board-container">
+            <div class="board" id="board-1"></div>
+            <div class="board" id="board-2"></div>
+            <div class="board" id="board-3"></div>
+            <div class="board" id="board-4"></div>
+            <div class="board" id="board-5"></div>
+            <div class="board" id="board-6"></div>
+            <div class="board" id="board-7"></div>
+            <div class="board" id="board-8"></div>
+            <div class="board" id="board-9"></div>
+        </div>
+
+        <div id="overlay">
+            <span id="overlay-message"></span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+/* Reset de estilo */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('assets/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Estilo da tela inicial */
+#intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  color: #fff;
+}
+
+#intro-container h1 {
+  font-size: 2em;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+.mode-selection button {
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px;
+  background-color: #6a0dad;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+}
+
+#game-container {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  gap: 20px;
+}
+
+#logo {
+  width: 250px; /* Tamanho do logo na tela */
+}
+
+#scoreboard {
+  width: 250px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 1.5em;
+  padding-top: 20px;
+  background: url('assets/placar.png') no-repeat center;
+  background-size: contain;
+}
+
+.score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.score span {
+  margin-top: -16px;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+#board-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  border: 2px solid #000000; /* Borda preta */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  background-color: transparent;
+}
+
+.cell {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #fff;
+  background-size: cover;
+  background-position: center;
+}
+
+#current-player {
+  margin-top: 10px;
+  font-size: 2em;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+/* Responsividade para mobile */
+@media (max-width: 600px) {
+  #game-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .top-row {
+    display: flex;
+    flex-direction: row; /* Coloca logo e placar lado a lado */
+    align-items: center;
+    gap: 10px;
+  }
+
+  #logo {
+    width: 220px; /* Ajuste do tamanho do logo no mobile */
+  }
+
+  #scoreboard {
+    width: 100px;
+    height: 80px;
+    font-size: 0.8em;
+  }
+
+  #current-player {
+    font-size: 1.2em;
+    margin-top: 5px;
+  }
+
+  .score span {
+    font-weight: bold;
+    font-size: 1.30em;
+  }
+}
+
+/* Estilos para o popup de feedback visual */
+#overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  z-index: 100; /* Garantir que fique sobre todos os elementos */
+  border-radius: 10px;
+  display: none; /* Inicialmente oculto */
+}
+
+#overlay button {
+  display: none; /* Botão reiniciar oculto para feedback de mini tabuleiros */
+}
+
+#restart-container {
+  height: 40px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+@media (min-width: 601px) { /* Apenas no desktop */
+  #left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #restart-container {
+    order: 3; /* Garante que o botão apareça após o indicador de jogada */
+  }
+}
+
+#restart-button {
+  padding: 8px 16px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #6a0dad; /* Cor roxa */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  display: none; /* Oculto inicialmente */
+}
