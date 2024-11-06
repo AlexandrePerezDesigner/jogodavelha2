@@ -129,9 +129,11 @@ function checkMiniBoardWinner(boardIndex) {
   return null;
 }
 
-// Verifica o vencedor global
+// Verifica o vencedor global ou declara vencedor por pontos ao final
 function checkGlobalWin() {
   const mainBoard = boardStates.map((_, index) => checkMiniBoardWinner(index));
+
+  // Verifica se há uma combinação vencedora no tabuleiro global
   for (const combination of winningCombinations) {
     const [a, b, c] = combination;
     if (mainBoard[a] && mainBoard[a] === mainBoard[b] && mainBoard[a] === mainBoard[c]) {
@@ -143,7 +145,10 @@ function checkGlobalWin() {
     }
   }
 
-  if (!mainBoard.includes(null)) {
+  // Verifica se o jogo acabou sem um vencedor global
+  const gameFinished = mainBoard.every(board => board !== null);
+  if (gameFinished) {
+    // Declara o vencedor por pontos ou empate
     if (scores["O"] > scores["X"]) {
       showOverlay("BOLA VENCEDOR POR PONTOS!", "#08939c", true);
     } else if (scores["X"] > scores["O"]) {
