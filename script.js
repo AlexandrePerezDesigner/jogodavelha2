@@ -1,7 +1,8 @@
 let currentPlayer = "O";
 let boardStates = Array(9).fill(null).map(() => Array(9).fill(null));
 let scores = { "O": 0, "X": 0 };
-let gameIsActive = true; // Variável para rastrear se o jogo está ativo
+let gameIsActive = true;
+const mode = localStorage.getItem("modoDeJogo"); // "2-jogadores", "ia-facil", ou "ia-dificil"
 
 const winningCombinations = [
   [0, 1, 2],
@@ -26,7 +27,7 @@ function updateCurrentPlayerText() {
   document.getElementById("current-player").textContent = currentPlayerText;
 }
 
-// Alterna o jogador e o cursor
+// Alterna o jogador
 function togglePlayer() {
   currentPlayer = currentPlayer === "O" ? "X" : "O";
   updateCursor();
@@ -45,15 +46,13 @@ function updateCursor() {
   });
 }
 
-// Destaca as células vencedoras com base no jogador e exibe a imagem grande sobre o mini tabuleiro
+// Destaca as células vencedoras
 function highlightWinningCells(boardIndex, combination, color, winner) {
-  // Define a cor de fundo das células vencedoras
   combination.forEach((index) => {
     const cell = document.getElementById(`board-${boardIndex + 1}`).children[index];
     cell.style.backgroundColor = color;
   });
 
-  // Exibe a imagem do vencedor sobre o mini tabuleiro
   const board = document.getElementById(`board-${boardIndex + 1}`);
   const winnerOverlay = document.createElement("div");
   winnerOverlay.style.position = "absolute";
@@ -80,23 +79,20 @@ function showOverlay(message, color, isFinal = false) {
   overlayMessage.textContent = message;
   overlay.style.display = "flex";
 
-  // Se for o final do jogo, exibe o feedback por 3 segundos
-  if (isFinal) {
-    setTimeout(() => {
-      overlay.style.display = "none";
-    }, 3000);
-    document.getElementById("restart-button").style.display = "block"; // Exibe o botão de reinício
-  } else {
-    setTimeout(() => {
-      overlay.style.display = "none";
-    }, 1000);
-  }
+  // Esconde o overlay após o tempo definido
+  setTimeout(() => {
+    overlay.style.display = "none";
+    if (isFinal) document.getElementById("restart-button").style.display = "block";
+  }, isFinal ? 3000 : 1000);
 }
 
-
-// Atualiza a função de verificação do vencedor do mini tabuleiro para mostrar o feedback
+// Verifica o vencedor do mini tabuleiro
 function checkMiniBoardWinner(boardIndex) {
   const board = boardStates[boardIndex];
+  
+  // Verifica se o tabuleiro já foi vencido para evitar popups duplicados
+  if (board.every(cell => cell !== null && cell !== "O" && cell !== "X")) return null;
+
   for (const combination of winningCombinations) {
     const [a, b, c] = combination;
     if (board[a] && board[a] === board[b] && board[a] === board[c]) {
@@ -107,6 +103,8 @@ function checkMiniBoardWinner(boardIndex) {
       const overlayColor = board[a] === "O" ? "#08939c" : "#853131";
       showOverlay(message, overlayColor);
 
+      // Marca o tabuleiro como vencido para evitar pontuação repetida
+      boardStates[boardIndex] = Array(9).fill(board[a]);
       return board[a];
     }
   }
@@ -131,7 +129,7 @@ function checkMiniBoardWinner(boardIndex) {
   return null;
 }
 
-// Atualiza a função de verificação de vitória global para mostrar o feedback de vencedor final
+// Verifica o vencedor global
 function checkGlobalWin() {
   const mainBoard = boardStates.map((_, index) => checkMiniBoardWinner(index));
   for (const combination of winningCombinations) {
@@ -139,35 +137,31 @@ function checkGlobalWin() {
     if (mainBoard[a] && mainBoard[a] === mainBoard[b] && mainBoard[a] === mainBoard[c]) {
       const winnerMessage = mainBoard[a] === "O" ? "BOLA VENCEDOR!" : "XIS VENCEDOR!";
       const winnerColor = mainBoard[a] === "O" ? "#08939c" : "#853131";
-
-      showOverlay(winnerMessage, winnerColor, true); // Exibe o popup com vencedor final e botão de reinício
-      gameIsActive = false; // Finaliza o jogo
+      showOverlay(winnerMessage, winnerColor, true);
+      gameIsActive = false;
       return;
     }
   }
 
-    // Verifica se o tabuleiro principal está completo e declara vencedor pela pontuação
   if (!mainBoard.includes(null)) {
     if (scores["O"] > scores["X"]) {
       showOverlay("BOLA VENCEDOR POR PONTOS!", "#08939c", true);
     } else if (scores["X"] > scores["O"]) {
       showOverlay("XIS VENCEDOR POR PONTOS!", "#853131", true);
     } else {
-      showOverlay("EMPATE!", "#666", true); // Exibe EMPATE se as pontuações forem iguais
+      showOverlay("EMPATE!", "#666", true);
     }
-    gameIsActive = false; // Finaliza o jogo
+    gameIsActive = false;
   }
 }
 
-// Função chamada ao clicar em uma célula
+// Jogada do jogador humano
 function handleCellClick(event, boardIndex, cellIndex) {
   if (!gameIsActive || boardStates[boardIndex][cellIndex] || checkMiniBoardWinner(boardIndex)) return;
 
   boardStates[boardIndex][cellIndex] = currentPlayer;
   const cell = event.target;
-  const imageUrl = currentPlayer === "O" 
-    ? "assets/bola2.png" 
-    : "assets/xis2.png";
+  const imageUrl = currentPlayer === "O" ? "assets/bola2.png" : "assets/xis2.png";
   cell.style.backgroundImage = `url('${imageUrl}')`;
   cell.style.backgroundSize = "cover";
 
@@ -179,9 +173,33 @@ function handleCellClick(event, boardIndex, cellIndex) {
   }
 
   togglePlayer();
+
+  // Verifica se é a vez da IA e chama `playAI`
+  if (gameIsActive && (mode === "ia-facil" || mode === "ia-dificil") && currentPlayer === "X") {
+    setTimeout(playAI, 500);
+  }
 }
 
-// Chame `updateCurrentPlayerText` na inicialização
+// Função de reinício do jogo
+function resetGame() {
+  boardStates = Array(9).fill(null).map(() => Array(9).fill(null));
+  scores = { "O": 0, "X": 0 };
+  updateScoreboard();
+  currentPlayer = "O"; // Redefine o jogador inicial como "O"
+  gameIsActive = true;
+
+  document.querySelectorAll(".board").forEach((board) => {
+    board.style.backgroundColor = "transparent";
+    board.innerHTML = "";
+  });
+
+  document.getElementById("overlay").style.display = "none";
+  document.getElementById("restart-button").style.display = "none";
+  
+  initializeGame();
+}
+
+// Inicialização do jogo
 function initializeGame() {
   document.querySelectorAll(".board").forEach((board, boardIndex) => {
     board.innerHTML = "";
@@ -194,23 +212,46 @@ function initializeGame() {
     }
   });
   updateCursor();
-  updateCurrentPlayerText(); // Define o texto inicial do jogador
-}
-
-// Função de reinício do jogo
-function resetGame() {
-  boardStates = Array(9).fill(null).map(() => Array(9).fill(null));
-  scores = { "O": 0, "X": 0 };
-  updateScoreboard();
-  document.querySelectorAll(".board").forEach((board) => {
-    board.style.backgroundColor = "transparent";
-    board.innerHTML = "";
-  });
-
-  document.getElementById("overlay").style.display = "none"; // Esconde o popup
-  document.getElementById("restart-button").style.display = "none"; // Esconde o botão de reinício
-  gameIsActive = true; // Reativa o jogo
-  initializeGame();
+  updateCurrentPlayerText();
 }
 
 initializeGame();
+
+// Função para a jogada da IA
+function playAI() {
+  if (!gameIsActive) return;
+
+  let availableMoves = [];
+  boardStates.forEach((board, boardIndex) => {
+    board.forEach((cell, cellIndex) => {
+      if (cell === null) availableMoves.push({ boardIndex, cellIndex });
+    });
+  });
+
+  function findWinningMove(player) {
+    for (let boardIndex = 0; boardIndex < 9; boardIndex++) {
+      const board = boardStates[boardIndex];
+      for (const [a, b, c] of winningCombinations) {
+        if (board[a] === player && board[b] === player && board[c] === null) return { boardIndex, cellIndex: c };
+        if (board[a] === player && board[b] === null && board[c] === player) return { boardIndex, cellIndex: b };
+        if (board[a] === null && board[b] === player && board[c] === player) return { boardIndex, cellIndex: a };
+      }
+    }
+    return null;
+  }
+
+  let move = null;
+  if (mode === "ia-dificil") {
+    move = findWinningMove("X") || findWinningMove("O");
+  }
+  
+  if (!move && availableMoves.length > 0) {
+    move = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+  }
+
+  if (move) {
+    const board = document.getElementById(`board-${move.boardIndex + 1}`);
+    const cell = board.children[move.cellIndex];
+    handleCellClick({ target: cell }, move.boardIndex, move.cellIndex);
+  }
+}
