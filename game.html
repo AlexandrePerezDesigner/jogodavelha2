@@ -6,7 +6,7 @@
     <title>Jogo da Velha 2.0</title>
     <link rel="stylesheet" href="estilo.css">
 </head>
-<body>
+<body class="fade-in">
     <div id="game-container">
         <div id="left-panel">
             <div class="top-row">
@@ -23,6 +23,9 @@
                 </div>
             </div>
             <div id="current-player"></div>
+            <div id="back-button-container">
+    <button id="back-button" onclick="goBackToHome()">VOLTAR</button>
+</div>
             <div id="restart-container">
                 <button id="restart-button" onclick="resetGame()">REINICIAR</button>
             </div>
