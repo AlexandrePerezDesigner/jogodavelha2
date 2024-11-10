@@ -102,14 +102,16 @@ body {
 }
 
 .cell {
-  background-color: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: 1px solid #fff;
-  background-size: cover;
-  background-position: center;
+    border-top: 1px solid white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4), 0 0 10px rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #fff;
+    background-size: cover;
+    background-position: center;
 }
 
 #current-player {
@@ -218,4 +220,50 @@ body {
   border: none;
   border-radius: 5px;
   display: none; /* Oculto inicialmente */
+}
+
+#back-button-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#back-button {
+    padding: 8px 16px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #6a0dad; /* Cor roxa */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+button, #back-button, #restart-button {
+    transition: box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover, #back-button:hover, #restart-button:hover {
+    box-shadow: 0px 0px 10px 8px rgba(106, 13, 173, 0.8);
+    background-color: #ffffff;
+    color: #6a0dad;
+}
+
+/* Classe de transição de saída */
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    background-color: #000; /* Cor escura para evitar o branco */
+}
+
+
+/* Classe para transição de entrada */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
