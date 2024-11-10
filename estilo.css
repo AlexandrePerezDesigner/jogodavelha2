@@ -6,14 +6,30 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: url('assets/bg.jpg') no-repeat center center fixed;
-  background-size: cover;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('assets/bg2.jpg') repeat-x; /* Fundo com repetição horizontal */
+    background-size: cover; /* Ajusta a imagem para cobrir o contêiner */
+    animation: scrollBackground 20s linear infinite;
+-webkit-animation: scrollBackground 20s linear infinite; /* Para navegadores baseados em WebKit */
+-moz-animation: scrollBackground 20s linear infinite;    /* Para Firefox */
+
 }
+
+/* Animação para mover o fundo da direita para a esquerda */
+@keyframes scrollBackground {
+    0% {
+        background-position: 0 0; /* Posição inicial */
+    }
+    100% {
+        background-position: -100% 0; /* Move a imagem para a esquerda */
+    }
+}
+
+
 
 /* Estilo da tela inicial */
 #intro-container {
@@ -266,4 +282,28 @@ button:hover, #back-button:hover, #restart-button:hover {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+
+#music-control {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+#toggle-music {
+    padding: 8px 16px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #6a0dad;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+#toggle-music:hover {
+    background-color: #ffffff;
+    color: #6a0dad;
 }
