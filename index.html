@@ -5,23 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Velha - Escolha do Modo</title>
     <link rel="stylesheet" href="estilo.css">
+    <script src="script.js" defer></script> <!-- Certifique-se de carregar o script.js aqui -->
 </head>
-<body>
+<body class="fade-in">
     <div id="intro-container">
         <img id="logo" src="assets/logo.png" alt="Logo">
         <h1>Bem-vindo ao Jogo da Velha 2.0!</h1>
         <div class="mode-selection">
-            <button onclick="startGame('2-jogadores')">2 Jogadores</button>
-            <button onclick="startGame('ia-facil')">IA Fácil</button>
-            <button onclick="startGame('ia-dificil')">IA Difícil</button>
+            <button id="btn-2-jogadores">2 Jogadores</button>
+            <button id="btn-ia-facil">IA Fácil</button>
+            <button id="btn-ia-dificil">IA Difícil</button>
         </div>
     </div>
-
-    <script>
-        function startGame(mode) {
-            localStorage.setItem("modoDeJogo", mode);
-            window.location.href = "game.html";
-        }
-    </script>
 </body>
 </html>
