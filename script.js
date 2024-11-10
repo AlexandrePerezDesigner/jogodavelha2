@@ -15,6 +15,51 @@ const winningCombinations = [
   [2, 4, 6]
 ];
 
+// Carrega o som de clique
+const buttonClickSound = new Audio('assets/button-pressed.mp3');
+
+// Função para reproduzir o som
+function playButtonClickSound() {
+    buttonClickSound.currentTime = 0; // Reinicia o som a cada clique
+    buttonClickSound.play();
+}
+
+// Função para iniciar o jogo com atraso para tocar o som
+// Função para iniciar o jogo com transição
+function startGame(mode) {
+    localStorage.setItem("modoDeJogo", mode);
+    playButtonClickSound();
+    document.body.classList.add("fade-out"); // Aplica fade-out
+    setTimeout(() => {
+        window.location.href = "game.html";  // Redireciona após a transição
+    }, 500); // Tempo ligeiramente reduzido para suavidade
+}
+
+function goBackToHome() {
+    playButtonClickSound();
+    document.body.classList.add("fade-out"); // Aplica fade-out
+    setTimeout(() => {
+        window.location.href = "index.html";  // Redireciona após a transição
+    }, 500); // Tempo ligeiramente reduzido para suavidade
+}
+
+
+
+// Adiciona os eventos aos botões após o carregamento da página
+// Adiciona os eventos aos botões após o carregamento da página
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btn-2-jogadores")?.addEventListener("click", () => startGame("2-jogadores"));
+    document.getElementById("btn-ia-facil")?.addEventListener("click", () => startGame("ia-facil"));
+    document.getElementById("btn-ia-dificil")?.addEventListener("click", () => startGame("ia-dificil"));
+
+    // Adiciona o evento para o botão "Reiniciar"
+    document.getElementById("restart-button")?.addEventListener("click", () => {
+        playButtonClickSound();
+        setTimeout(resetGame, 300); // Reinicia o jogo após o som
+    });
+});
+
+
 // Atualiza o placar visual
 function updateScoreboard() {
   document.getElementById("score-o-count").textContent = scores["O"];
