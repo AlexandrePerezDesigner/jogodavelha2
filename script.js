@@ -28,12 +28,14 @@ function playButtonClickSound() {
 // Função para iniciar o jogo com transição
 function startGame(mode) {
     localStorage.setItem("modoDeJogo", mode);
+    localStorage.setItem("iniciarMusica", "true"); // Marca para iniciar a música
     playButtonClickSound();
-    document.body.classList.add("fade-out"); // Aplica fade-out
+    document.body.classList.add("fade-out");
     setTimeout(() => {
-        window.location.href = "game.html";  // Redireciona após a transição
-    }, 500); // Tempo ligeiramente reduzido para suavidade
+        window.location.href = "game.html";
+    }, 500);
 }
+
 
 function goBackToHome() {
     playButtonClickSound();
@@ -305,3 +307,49 @@ function playAI() {
     handleCellClick({ target: cell }, move.boardIndex, move.cellIndex);
   }
 }
+
+// Carrega a música de fundo
+const backgroundMusic = new Audio('assets/song-velha.mp3');
+backgroundMusic.volume = 0.4; // Define o volume para 40%
+backgroundMusic.loop = true;  // Configura para tocar em loop
+
+// Função para iniciar a música, se marcada para iniciar
+function startBackgroundMusicIfNeeded() {
+    const iniciarMusica = localStorage.getItem("iniciarMusica");
+    if (iniciarMusica === "true") {
+        backgroundMusic.play().catch(() => {
+            document.body.addEventListener('click', resumeBackgroundMusic, { once: true });
+        });
+        localStorage.setItem("iniciarMusica", "false"); // Reset para evitar repetição
+    }
+}
+
+// Função para iniciar a música após uma interação do usuário
+function resumeBackgroundMusic() {
+    backgroundMusic.play();
+    document.body.removeEventListener('click', resumeBackgroundMusic);
+}
+
+// Configura o botão de controle da música para alternar entre tocar e pausar
+function setupMusicControl() {
+    const musicToggleButton = document.getElementById("toggle-music");
+    if (musicToggleButton) {
+        musicToggleButton.addEventListener("click", () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                musicToggleButton.textContent = "Desligar Música";
+            } else {
+                backgroundMusic.pause();
+                musicToggleButton.textContent = "Ligar Música";
+            }
+        });
+    }
+}
+
+// Chama a função ao carregar a página para verificar e iniciar a música, se necessário
+document.addEventListener("DOMContentLoaded", () => {
+    startBackgroundMusicIfNeeded(); // Inicia a música somente se marcada
+    setupMusicControl(); // Configura o botão de controle de música
+});
+
+
