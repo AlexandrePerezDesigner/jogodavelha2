@@ -17,14 +17,21 @@ const winningCombinations = [
 
 // Carrega o som de clique
 const buttonClickSound = new Audio('assets/button-pressed.mp3');
+// Carrega o som de ponto
+const pointSound = new Audio('assets/point.mp3');
 
-// Função para reproduzir o som
+// Função para reproduzir o som de clique
 function playButtonClickSound() {
     buttonClickSound.currentTime = 0; // Reinicia o som a cada clique
     buttonClickSound.play();
 }
 
-// Função para iniciar o jogo com atraso para tocar o som
+// Função para reproduzir o som de ponto
+function playPointSound() {
+    pointSound.currentTime = 0; // Reinicia o som a cada ponto
+    pointSound.play();
+}
+
 // Função para iniciar o jogo com transição
 function startGame(mode) {
     localStorage.setItem("modoDeJogo", mode);
@@ -36,18 +43,15 @@ function startGame(mode) {
     }, 500);
 }
 
-
+// Função para voltar para a página inicial com transição
 function goBackToHome() {
     playButtonClickSound();
     document.body.classList.add("fade-out"); // Aplica fade-out
     setTimeout(() => {
-        window.location.href = "index.html";  // Redireciona após a transição
-    }, 500); // Tempo ligeiramente reduzido para suavidade
+        window.location.href = "index.html";
+    }, 500);
 }
 
-
-
-// Adiciona os eventos aos botões após o carregamento da página
 // Adiciona os eventos aos botões após o carregamento da página
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btn-2-jogadores")?.addEventListener("click", () => startGame("2-jogadores"));
@@ -60,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(resetGame, 300); // Reinicia o jogo após o som
     });
 });
-
 
 // Atualiza o placar visual
 function updateScoreboard() {
@@ -149,6 +152,9 @@ function checkMiniBoardWinner(boardIndex) {
       const message = board[a] === "O" ? "PONTO PARA BOLA" : "PONTO PARA XIS";
       const overlayColor = board[a] === "O" ? "#08939c" : "#853131";
       showOverlay(message, overlayColor);
+
+      // Toca o som de ponto quando um mini tabuleiro é vencido
+      playPointSound();
 
       // Marca o tabuleiro como vencido para evitar pontuação repetida
       boardStates[boardIndex] = Array(9).fill(board[a]);
@@ -351,5 +357,3 @@ document.addEventListener("DOMContentLoaded", () => {
     startBackgroundMusicIfNeeded(); // Inicia a música somente se marcada
     setupMusicControl(); // Configura o botão de controle de música
 });
-
-
