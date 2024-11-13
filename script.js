@@ -183,35 +183,53 @@ function checkMiniBoardWinner(boardIndex) {
 }
 
 // Verifica o vencedor global ou declara vencedor por pontos ao final
-function checkGlobalWin() {
-  const mainBoard = boardStates.map((_, index) => checkMiniBoardWinner(index));
+// Carrega o som de vitória
+const victorySound = new Audio('assets/victory.mp3');
 
-  // Verifica se há uma combinação vencedora no tabuleiro global
-  for (const combination of winningCombinations) {
-    const [a, b, c] = combination;
-    if (mainBoard[a] && mainBoard[a] === mainBoard[b] && mainBoard[a] === mainBoard[c]) {
-      const winnerMessage = mainBoard[a] === "O" ? "BOLA VENCEDOR!" : "XIS VENCEDOR!";
-      const winnerColor = mainBoard[a] === "O" ? "#08939c" : "#853131";
-      showOverlay(winnerMessage, winnerColor, true);
-      gameIsActive = false;
-      return;
-    }
-  }
-
-  // Verifica se o jogo acabou sem um vencedor global
-  const gameFinished = mainBoard.every(board => board !== null);
-  if (gameFinished) {
-    // Declara o vencedor por pontos ou empate
-    if (scores["O"] > scores["X"]) {
-      showOverlay("BOLA VENCEDOR POR PONTOS!", "#08939c", true);
-    } else if (scores["X"] > scores["O"]) {
-      showOverlay("XIS VENCEDOR POR PONTOS!", "#853131", true);
-    } else {
-      showOverlay("EMPATE!", "#666", true);
-    }
-    gameIsActive = false;
-  }
+// Função para reproduzir o som de vitória
+function playVictorySound() {
+    victorySound.currentTime = 0; // Reinicia o som
+    victorySound.play();
 }
+
+// Verifica o vencedor global ou declara vencedor por pontos ao final
+function checkGlobalWin() {
+    const mainBoard = boardStates.map((_, index) => checkMiniBoardWinner(index));
+
+    // Verifica se há uma combinação vencedora no tabuleiro global
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (mainBoard[a] && mainBoard[a] === mainBoard[b] && mainBoard[a] === mainBoard[c]) {
+            const winnerMessage = mainBoard[a] === "O" ? "BOLA VENCEDOR!" : "XIS VENCEDOR!";
+            const winnerColor = mainBoard[a] === "O" ? "#08939c" : "#853131";
+
+            // Toca o som de vitória
+            playVictorySound();
+
+            showOverlay(winnerMessage, winnerColor, true);
+            gameIsActive = false;
+            return;
+        }
+    }
+
+    // Verifica se o jogo acabou sem um vencedor global
+    const gameFinished = mainBoard.every(board => board !== null);
+    if (gameFinished) {
+        // Declara o vencedor por pontos ou empate
+        if (scores["O"] > scores["X"]) {
+            showOverlay("BOLA VENCEDOR POR PONTOS!", "#08939c", true);
+            playVictorySound(); // Toca o som de vitória
+        } else if (scores["X"] > scores["O"]) {
+            showOverlay("XIS VENCEDOR POR PONTOS!", "#853131", true);
+            playVictorySound(); // Toca o som de vitória
+        } else {
+            showOverlay("EMPATE!", "#666", true);
+        }
+        gameIsActive = false;
+    }
+}
+
+
 
 // Jogada do jogador humano
 function handleCellClick(event, boardIndex, cellIndex) {
